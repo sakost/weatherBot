@@ -45,9 +45,7 @@ def _(message: Message):
     text = message.text[len(command):].strip()
     city = text
     if not city:
-        bot.reply_to(message, 'command /weather needs an argument - city\nfor example: `/weather Moscow`',
-                     parse_mode='MARKDOWN')
-    else:
-        req = requests.get(f'https://wttr.in/{city}?0?q?T')
-        bot.reply_to(message, f'```{req.text}```', parse_mode='MARKDOWN')
+        city = 'Moscow'
+    req = requests.get(f'https://wttr.in/{city}?0?q?T')
+    bot.reply_to(message, f'```{req.text}```', parse_mode='MARKDOWN')
 
