@@ -1,3 +1,4 @@
+import requests
 from telebot.types import Message
 
 from .bot import bot, commands_list
@@ -35,3 +36,18 @@ def _(message: Message):
         text += '\n'
 
     bot.reply_to(message, text)
+
+
+@bot.message_handler(['weather'])
+def _(message: Message):
+    """weather forecast"""
+    command = message.text.split()[0]
+    text = message.text[len(command):].strip()
+    city = text
+    if not city:
+        bot.reply_to(message, 'command /weather needs an argument - city\nfor example: `/weather Moscow`',
+                     parse_mode='MARKDOWN')
+    else:
+        req = requests.get(f'https://wttr.in/{city}?0?q?T')
+        bot.reply_to(message, f'```{req.text}```', parse_mode='MARKDOWN')
+
